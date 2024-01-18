@@ -1,0 +1,41 @@
+{
+  "image": "mcr.microsoft.com/devcontainers/jekyll",   
+  "name": "Github Pages Development",
+  "waitFor": "onCreateCommand",
+  // // On container creation, install dependencies.
+  "postCreateCommand": [
+    "cd ${input:projectName} && bundle install",
+    // Copy in our zshrc and make the terminal friendly
+    "wget https://raw.githubusercontent.com/Riverscapes/environment/master/nar-ys.zsh-theme -O ~/.oh-my-zsh/custom/themes/nar-ys.zsh-theme",
+    "wget https://raw.githubusercontent.com/Riverscapes/environment/master/.aliases -O ~/.aliases",
+    "wget https://raw.githubusercontent.com/Riverscapes/environment/master/.zshrc -O ~/.zshrc"
+  ],
+  // // Build and run the dev site on container start.
+  "postAttachCommand": "bundle exec jekyll serve",
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "zsh"
+      },
+      "extensions": [
+        "GitHub.copilot",
+        "GitHub.copilot-chat",
+        "eriklynd.json-tools",
+        "yzhang.markdown-all-in-one",
+        "dbaeumer.vscode-eslint",
+        "mhutchie.git-graph"
+      ]
+    }
+  },
+  // Trigger actions on ports. More info: https://containers.dev/implementors/json_reference/#port-attributes
+  "portsAttributes": {
+    "4000": {
+      "label": "Application",
+      "onAutoForward": "openBrowserOnce"
+    }
+  },
+  // Use 'forwardPorts' to make a list of ports inside the container available locally.
+  "forwardPorts": [
+    4000
+  ]
+}
